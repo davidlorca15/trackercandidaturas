@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArchivoCandidatura {
-    private static final String FILE_PATH = "candidaturas.txt";
+    private static final String FILE_PATH = "candidaturas.csv";
     private static final String SEPARATOR = ";";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
