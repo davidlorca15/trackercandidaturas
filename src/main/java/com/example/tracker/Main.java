@@ -2,7 +2,25 @@ package com.example.tracker;
 
 import com.example.tracker.business.ServicioCandidatura;
 
+/**
+ * Clase principal de la aplicación (Entry Point).
+ * Se encarga de procesar los argumentos de la línea de comandos para ejecutar
+ * las operaciones correspondientes sobre el servicio de candidaturas.
+ *
+ * @author Rodrigo Franco y David LLorca
+ * @version 1.0
+ */
+
 public class Main {
+
+    /**
+     * Método principal que se ejecuta al iniciar la aplicación desde la línea de comandos.
+     * Interpreta el comando introducido y gestiona el flujo de ejecución o errores.
+     *
+     * @param args Argumentos de la línea de comandos (comandos y parámetros como --estado, --titulo, etc.).
+     */
+
+
     public static void main(String[] args) {
         if (args.length == 0) {
             System.out.println("Error: Faltan argumentos. Operaciones válidas: -listar, -añadir, -ver, -borrar, -importar");
@@ -62,6 +80,15 @@ public class Main {
             System.out.println("Error de ejecución: " + e.getMessage());
         }
     }
+
+    /**
+     * Método auxiliar para buscar el valor asociado a una bandera (flag) específica
+     * dentro de los argumentos de la línea de comandos.
+     *
+     * @param args Arreglo de argumentos de la línea de comandos.
+     * @param flag La etiqueta o bandera que se desea buscar (por ejemplo, "--estado").
+     * @return El valor que sigue a la bandera, o {@code null} si no se encuentra.
+     */
 
     private static String getArgValue(String[] args, String flag) {
         for (int i = 0; i < args.length - 1; i++) {
