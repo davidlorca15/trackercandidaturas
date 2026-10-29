@@ -8,10 +8,28 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Clase encargada de gestionar la persistencia de las candidaturas utilizando un archivo CSV.
+ * Se encarga de leer y escribir la información de las ofertas de empleo en el almacenamiento local.
+ *
+ * @author David Lorca
+ * @version 1.0
+ */
+
 public class ArchivoCandidatura {
     private static final String FILE_PATH = "candidaturas.csv";
     private static final String SEPARATOR = ";";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+
+    /**
+     * Lee todas las ofertas de empleo almacenadas en el archivo CSV.
+     * Si el archivo no existe todavía, devuelve una lista vacía.
+     *
+     * @return Una lista con todas las ofertas de empleo leídas del archivo.
+     */
+
 
     public List<Oferta> leerTodas() {
         List<Oferta> ofertas = new ArrayList<>();
@@ -36,6 +54,13 @@ public class ArchivoCandidatura {
         }
         return ofertas;
     }
+
+    /**
+     * Guarda una lista completa de ofertas de empleo en el archivo CSV,
+     * sobrescribiendo el archivo previo y escribiendo la cabecera correspondiente.
+     *
+     * @param ofertas La lista de ofertas que se desea almacenar.
+     */
 
     public void guardarTodas(List<Oferta> ofertas) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
