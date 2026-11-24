@@ -1,34 +1,31 @@
-#  Candia - CLI Tracker de Candidaturas
+# Candia - CLI Tracker de Candidaturas
 
-Aplicación de consola en Java basada en una **arquitectura de tres capas** (Controlador/Main, Servicio y Datos) para el seguimiento y gestión de ofertas de trabajo con almacenamiento y persistencia en archivos planos.
+Aplicación de consola Java con **arquitectura de tres capas** para el seguimiento de ofertas de empleo. La persistencia está en MySQL (`EMPRESA`, `OFERTA`, `ENTREVISTA`); el CSV se usa únicamente para importar datos.
 
----
+## Arquitectura del sistema
 
+- **Controlador (`Main.java`)**: procesa los argumentos de la línea de comandos.
+- **Servicio (`ServicioCandidatura.java`, `ImportadorCsv.java`)**: lógica de negocio, filtros e importación transaccional.
+- **Datos (`OfertaRepositorio.java`, `EmpresaRepositorio.java`, `ConexionBD.java`)**: acceso a MySQL mediante `PreparedStatement`.
+- **Modelo (`model/Oferta.java`)**: entidad de dominio.
 
-##  Arquitectura del Sistema
+## Comandos disponibles
 
-* **Capa Controlador (`Main.java`)**: Gestiona la entrada por línea de comandos, sanea argumentos y procesa banderas.
-* **Capa Servicio (`ServicioCandidatura.java`)**: Contiene la lógica de negocio, filtros y operaciones de ordenación/validación.
-* **Capa Datos (`ArchivoCandidatura.java`)**: Gestiona la lectura, escritura e importación del archivo plano mediante delimitadores de punto y coma (`;`).
+| Comando | Descripción | Ejemplo de uso |
+| :--- | :--- | :--- |
+| `-listar` | Lista o filtra por estado y empresa. | `-listar --estado Pendiente --empresa TechCorp` |
+| `-añadir` | Registra una candidatura. | `-añadir --titulo "Java Dev" --empresa "Tech" --estado "Pendiente" --fecha "30/10/2026"` |
+| `-ver <id>` | Muestra el detalle de una candidatura. | `-ver 1` |
+| `-borrar <id>` | Elimina la candidatura indicada. | `-borrar 1` |
+| `-importar` | Importa un CSV a MySQL en una transacción. | `-importar candidaturas.csv` |
 
----
+## Formato del CSV (`candidaturas.csv`)
 
-##  Comandos Disponibles
-
- Comando  Descripción  Ejemplo de Uso 
-| :--- | :--- | :--- 
-| `-listar` | Muestra todas las candidaturas o las filtra por estado/empresa. | `-listar --estado Pendiente --empresa TechCorp` |
-| `-añadir` | Registra una nueva candidatura en el sistema. | `-añadir --titulo "Java Dev" --empresa "Tech" --estado "Pendiente" --fecha "30/10/2026"` |
-| `-ver` | Muestra el detalle completo de una candidatura por su ID. | `-ver 13` |
-| `-borrar` | Elimina del archivo la candidatura especificada por su ID. | `-borrar 13` |
-| `-importar` | Importa masivamente un conjunto de candidaturas desde un CSV. | `-importar candidaturas.csv` |
-
----
-
-##  Formato del Archivo CSV (`candidaturas.csv`)
-
-El archivo de almacenamiento y de importación utiliza el punto y coma (`;`) como delimitador con la siguiente estructura de columnas:
+Delimitador `;`, con cabecera. La primera columna (ID) se ignora:
 
 ```text
-Puesto/Título;Empresa;Estado;Fecha
-Desarrollador Backend Java;TechCorp Solutions;Pendiente;30/10/2026
+id;titulo;empresa;estado;fechaPostulacion;enlace;notas
+0;Desarrollador Backend Java;TechCorp;Pendiente;30/10/2026;https://ejemplo.com/oferta;Entrevista el lunes
+```
+
+Fechas en `dd/MM/yyyy`. Longitudes máximas: título 150, empresa 150, estado 30, enlace 255.
