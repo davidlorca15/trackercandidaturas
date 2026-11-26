@@ -8,7 +8,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -22,9 +25,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +46,8 @@ import java.util.concurrent.Executors;
  */
 public class CandidaturasController {
 
+    @FXML
+    private VBox sidebar;
     @FXML
     private Label lblSubtitulo, lblTotal, lblPendientes, lblEntrevista, lblAceptadas;
     @FXML
@@ -276,21 +285,39 @@ public class CandidaturasController {
                 ButtonType.OK).show();
     }
 
-    @FXML
-    private void onNavInicio() { }
+    private void irA(String rutaFxml) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFxml));
+            Parent raiz = loader.load();
+            Stage stage = (Stage) sidebar.getScene().getWindow();
+            stage.setScene(new Scene(raiz, 1440, 900));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     @FXML
-    private void onNavCandidaturas() { }
+    private void onNavInicio() {
+    }
 
     @FXML
-    private void onNavEmpresas() { }
+    private void onNavCandidaturas() {
+    }
 
     @FXML
-    private void onNavEntrevistas() { }
+    private void onNavEmpresas() {
+        irA("/com/example/tracker/empresas.fxml");
+    }
 
     @FXML
-    private void onNavEstadisticas() { }
+    private void onNavEntrevistas() {
+    }
 
     @FXML
-    private void onNavAjustes() { }
+    private void onNavEstadisticas() {
+    }
+
+    @FXML
+    private void onNavAjustes() {
+    }
 }
