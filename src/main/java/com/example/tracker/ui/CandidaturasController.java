@@ -311,6 +311,7 @@ public class CandidaturasController {
 
     @FXML
     private void onNavEntrevistas() {
+        irA("/com/example/tracker/entrevistas.fxml");
     }
 
     @FXML
