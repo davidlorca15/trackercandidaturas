@@ -18,6 +18,18 @@ import java.util.List;
  */
 public class EmpresaRepositorio {
 
+    /**
+     * Busca una empresa por nombre (sin distinguir mayúsculas ni minúsculas) usando
+     * la conexión recibida; si no existe, la crea con sector y web vacíos.
+     *
+     * @param conn          conexión JDBC activa (permite participar en transacciones externas)
+     * @param nombreEmpresa nombre de la empresa a buscar o crear
+     * @param fechaRegistro fecha de registro a asignar si se crea una nueva empresa
+     * @return identificador ({@code id}) de la empresa existente o recién creada
+     * @throws SQLException             si ocurre un error al consultar o insertar en {@code EMPRESA}
+     * @throws IllegalArgumentException si el nombre es nulo, está en blanco o supera los 150 caracteres
+     */
+
     public long obtenerOCrear(Connection conn, String nombreEmpresa, LocalDate fechaRegistro) throws SQLException {
         validar(nombreEmpresa);
 
@@ -30,6 +42,19 @@ public class EmpresaRepositorio {
                 }
             }
         }
+
+        /**
+         * Crea una empresa nueva en una conexión propia. No permite repetir el nombre
+         * sin distinción de mayúsculas.
+         *
+         * @param nombre        nombre de la empresa
+         * @param sector        sector de actividad (opcional, máximo 100 caracteres)
+         * @param web           sitio web de la empresa (opcional, máximo 255 caracteres)
+         * @param fechaRegistro fecha de registro de la empresa
+         * @return identificador ({@code id}) generado para la nueva empresa
+         * @throws SQLException             si ya existe una empresa con ese nombre o falla la operación SQL
+         * @throws IllegalArgumentException si el nombre no es válido o algún campo opcional excede su longitud máxima
+         */
 
         return insertar(conn, nombreEmpresa, "", "", fechaRegistro);
     }
@@ -52,6 +77,17 @@ public class EmpresaRepositorio {
             return insertar(conn, nombre, sector, web, fechaRegistro);
         }
     }
+
+    /**
+     * Lista las empresas ordenadas por nombre junto con el número de ofertas
+     * ({@code OFERTA}) vinculadas a cada una, filtrando opcionalmente por nombre
+     * o sector.
+     *
+     * @param filtro texto de búsqueda parcial para filtrar por nombre o sector; si es
+     *               nulo o está en blanco, devuelve todas las empresas
+     * @return lista de {@link Empresa} con su contador de candidaturas/ofertas
+     * @throws SQLException si ocurre un error al ejecutar la consulta en base de datos
+     */
 
     /** Lista las empresas con su número de candidaturas, opcionalmente filtradas por nombre o sector. */
     public List<Empresa> listar(String filtro) throws SQLException {
@@ -90,6 +126,19 @@ public class EmpresaRepositorio {
         }
     }
 
+    /**
+     * Inserta un nuevo registro en {@code EMPRESA} utilizando la conexión indicada
+     * y recupera la clave primaria autogenerada.
+     *
+     * @param conn          conexión JDBC activa
+     * @param nombre        nombre de la empresa
+     * @param sector        sector de la empresa
+     * @param web           URL o web de la empresa
+     * @param fechaRegistro fecha de registro
+     * @return clave primaria ({@code id}) generada por MySQL
+     * @throws SQLException si falla la inserción o no se devuelve ninguna clave generada
+     */
+
     private long insertar(Connection conn, String nombre, String sector, String web,
                           LocalDate fechaRegistro) throws SQLException {
         String insertar = "INSERT INTO EMPRESA (nombre, sector, web, fechaRegistro) VALUES (?, ?, ?, ?)";
@@ -118,6 +167,13 @@ public class EmpresaRepositorio {
             throw new IllegalArgumentException("El nombre de la empresa supera los 150 caracteres permitidos");
         }
     }
+
+    /**
+     * Valida que el nombre de la empresa no sea nulo, no esté en blanco y no supere
+     * los 150 caracteres.
+     *
+     * @throws IllegalArgumentException si el nombre no cumple las restricciones
+     */
 
     private static void validarCamposOpcionales(String sector, String web) {
         if (sector != null && sector.length() > 100) {
