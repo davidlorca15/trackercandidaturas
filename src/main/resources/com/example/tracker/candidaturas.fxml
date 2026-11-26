@@ -25,8 +25,8 @@
             <HBox spacing="10" styleClass="brand" alignment="CENTER_LEFT">
                 <padding><Insets bottom="24"/></padding>
                 <ImageView fitWidth="28" preserveRatio="true">
-                    <!-- He buscado con la IA como añadir una imagen debido a que no sabia, aun así funciona pero aparece en rojo como un "error" pero funciona a la perfección -->
-                    <image><Image url="@/com/example/tracker/images/logo_blanco.png"/></image>
+                    <!-- Ruta relativa al FXML: funciona tanto en classpath como en modular (evita el LoadException) -->
+                    <image><Image url="@images/logo_blanco.png"/></image>
                 </ImageView>
                 <VBox>
                     <Label text="Candia" styleClass="brand-nombre"/>
@@ -35,7 +35,7 @@
             </HBox>
 
             <Button text="Inicio" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavInicio"/>
-            <Button text="Candidaturas" maxWidth="Infinity" styleClass="nav-item, nav-activo" onAction="#onNavCandidaturas"/>
+            <Button text="Candidaturas" maxWidth="Infinity" styleClass="nav-item nav-activo" onAction="#onNavCandidaturas"/>
             <Button text="Empresas" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavEmpresas"/>
             <Button text="Entrevistas" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavEntrevistas"/>
             <Button text="Estadísticas" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavEstadisticas"/>
