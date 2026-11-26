@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+            fx:controller="com.example.tracker.ui.CandidaturasController"
+            stylesheets="@candia.css" styleClass="root">
+
+    <left>
+        <VBox fx:id="sidebar" styleClass="sidebar" prefWidth="240" spacing="4">
+            <padding><Insets top="24" right="16" bottom="24" left="16"/></padding>
+
+            <HBox spacing="10" styleClass="brand" alignment="CENTER_LEFT">
+                <padding><Insets bottom="24"/></padding>
+                <ImageView fitWidth="28" preserveRatio="true">
+                    <!-- He buscado con la IA como añadir una imagen debido a que no sabia, aun así funciona pero aparece en rojo como un "error" pero funciona a la perfección -->
+                    <image><Image url="@/com/example/tracker/images/logo_blanco.png"/></image>
+                </ImageView>
+                <VBox>
+                    <Label text="Candia" styleClass="brand-nombre"/>
+                    <Label text="SEGUIMIENTO PROFESIONAL" styleClass="brand-tagline"/>
+                </VBox>
+            </HBox>
+
+            <Button text="Inicio" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavInicio"/>
+            <Button text="Candidaturas" maxWidth="Infinity" styleClass="nav-item, nav-activo" onAction="#onNavCandidaturas"/>
+            <Button text="Empresas" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavEmpresas"/>
+            <Button text="Entrevistas" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavEntrevistas"/>
+            <Button text="Estadísticas" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavEstadisticas"/>
+
+            <VBox VBox.vgrow="ALWAYS"/>
+            <Button text="Ajustes" maxWidth="Infinity" styleClass="nav-item" onAction="#onNavAjustes"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="contenido" spacing="24">
+            <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+
+            <!-- Cabecera -->
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Candidaturas" styleClass="titulo-h1"/>
+                    <Label fx:id="lblSubtitulo" text="15 candidaturas · últimos 3 meses" styleClass="texto-secundario"/>
+                </VBox>
+                <Button text="Importar CSV" styleClass="boton-secundario" onAction="#onImportarCsv"/>
+                <Button text="+ Nueva candidatura" styleClass="boton-primario" onAction="#onNuevaCandidatura"/>
+            </HBox>
+
+            <!-- Indicadores -->
+            <GridPane hgap="16" vgap="16">
+                <columnConstraints>
+                    <javafx.scene.layout.ColumnConstraints percentWidth="50"/>
+                    <javafx.scene.layout.ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+                <VBox styleClass="tarjeta" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Total" styleClass="texto-pequeno"/>
+                    <Label fx:id="lblTotal" text="15" styleClass="valor-stat"/>
+                </VBox>
+                <VBox styleClass="tarjeta" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Pendientes" styleClass="texto-pequeno"/>
+                    <Label fx:id="lblPendientes" text="8" styleClass="valor-stat"/>
+                </VBox>
+                <VBox styleClass="tarjeta" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="En entrevista" styleClass="texto-pequeno"/>
+                    <Label fx:id="lblEntrevista" text="4" styleClass="valor-stat"/>
+                </VBox>
+                <VBox styleClass="tarjeta" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Aceptadas" styleClass="texto-pequeno"/>
+                    <Label fx:id="lblAceptadas" text="1" styleClass="valor-stat"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Filtros -->
+            <HBox styleClass="tarjeta" spacing="16" alignment="BOTTOM_LEFT">
+                <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Buscar puesto o empresa" styleClass="etiqueta"/>
+                    <TextField fx:id="txtBuscar" promptText="Ej. Desarrollador"/>
+                </VBox>
+                <VBox spacing="6" prefWidth="220">
+                    <Label text="Estado" styleClass="etiqueta"/>
+                    <ComboBox fx:id="cmbEstado" maxWidth="Infinity"/>
+                </VBox>
+                <Button text="Filtrar" styleClass="boton-primario" onAction="#onFiltrar"/>
+            </HBox>
+
+            <!-- Tabla -->
+            <TableView fx:id="tablaCandidaturas" VBox.vgrow="ALWAYS" styleClass="tabla-candidaturas">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colPuesto" text="PUESTO" prefWidth="220"/>
+                    <TableColumn fx:id="colEmpresa" text="EMPRESA" prefWidth="130"/>
+                    <TableColumn fx:id="colFecha" text="FECHA" prefWidth="120"/>
+                    <TableColumn fx:id="colEstado" text="ESTADO" prefWidth="150"/>
+                    <TableColumn fx:id="colAcciones" text="ACCIONES" prefWidth="110" sortable="false"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
