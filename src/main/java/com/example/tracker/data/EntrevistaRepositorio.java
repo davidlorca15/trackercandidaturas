@@ -35,6 +35,15 @@ public class EntrevistaRepositorio {
         }
     }
 
+    public boolean borrar(long id) throws SQLException {
+        String sql = "DELETE FROM ENTREVISTA WHERE id = ?";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     private static Entrevista mapear(ResultSet rs) throws SQLException {
         return new Entrevista(
                 rs.getLong("id"),

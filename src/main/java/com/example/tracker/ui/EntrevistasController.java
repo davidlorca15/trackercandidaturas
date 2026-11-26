@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -91,6 +92,8 @@ public class EntrevistasController {
             }
         });
 
+        colAcciones.setCellFactory(columna -> new AccionesCell());
+
         tablaEntrevistas.setItems(entrevistas);
         cargarEntrevistas();
     }
@@ -112,6 +115,42 @@ public class EntrevistasController {
                 mostrarError("No se pudieron cargar las entrevistas.", getException());
             }
         });
+    }
+
+    private void borrar(Entrevista entrevista) {
+        executor.execute(new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                repositorio.borrar(entrevista.getId());
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                cargarEntrevistas();
+            }
+
+            @Override
+            protected void failed() {
+                mostrarError("No se pudo borrar la entrevista.", getException());
+            }
+        });
+    }
+
+    /** Celda de la columna Acciones con el botón Borrar. */
+    private class AccionesCell extends TableCell<Entrevista, Void> {
+
+        private final Button btnBorrar = new Button("Borrar");
+
+        AccionesCell() {
+            btnBorrar.setOnAction(e -> borrar(getTableView().getItems().get(getIndex())));
+        }
+
+        @Override
+        protected void updateItem(Void item, boolean vacia) {
+            super.updateItem(item, vacia);
+            setGraphic(vacia ? null : btnBorrar);
+        }
     }
 
     private static String etiquetaEstado(String resultado) {
