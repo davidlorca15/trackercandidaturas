@@ -19,10 +19,29 @@ import java.util.List;
  */
 public class ImportadorCsv {
 
+    /** Formato esperado para las fechas de postulación en el CSV ({@code dd/MM/yyyy}). */
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private final EmpresaRepositorio empresas = new EmpresaRepositorio();
     private final OfertaRepositorio ofertas = new OfertaRepositorio();
+
+    /**
+     * Lee un archivo CSV en codificación UTF-8 (omitiendo la primera fila de cabecera)
+     * e inserta sus filas válidas en la base de datos dentro de una transacción.
+     *
+     * <p>Cada fila no vacía debe contener al menos 7 columnas separadas por {@code ;}:
+     * {@code cols[1]} título, {@code cols[2]} empresa, {@code cols[3]} estado,
+     * {@code cols[4]} fecha ({@code dd/MM/yyyy}), {@code cols[5]} enlace y
+     * {@code cols[6]} notas.</p>
+     *
+     * @param rutaCsv ruta del archivo CSV a importar
+     * @return número total de ofertas insertadas en la base de datos
+     * @throws IllegalArgumentException si el archivo no existe, alguna línea no tiene
+     *                                  el número mínimo de columnas o la fecha no
+     *                                  cumple el formato {@code dd/MM/yyyy}
+     * @throws Exception si ocurre un error de lectura del archivo o de acceso/transacción
+     *                   en MySQL (tras revertir los cambios pendientes)
+     */
 
     public int importarDesdeCsv(Path rutaCsv) throws Exception {
         if (!Files.exists(rutaCsv)) {
